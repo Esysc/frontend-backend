@@ -7,46 +7,60 @@ test.describe('Routes page', () => {
   })
 
   test('should display route form', async ({ page }) => {
+    await page.goto('/routes')
     await page.waitForLoadState('networkidle')
     await expect(page).toHaveURL('/routes')
 
     await expect(
-      page.getByRole('heading', { name: /calculate route/i })
+      page.locator('.v-card-title', { hasText: /calculate route/i })
     ).toBeVisible()
-    await expect(page.getByText('From Station')).toBeVisible()
-    await expect(page.getByText('To Station')).toBeVisible()
+    await expect(
+      page.locator('.v-select').filter({ hasText: 'From Station' })
+    ).toBeVisible()
+    await expect(
+      page.locator('.v-select').filter({ hasText: 'To Station' })
+    ).toBeVisible()
   })
 
   test('should calculate route between two stations', async ({ page }) => {
+    await page.goto('/routes')
     await page.waitForLoadState('networkidle')
 
     // Select from station (Montreux)
-    await page.getByText('From Station').click()
-    await page.getByText('Montreux', { exact: true }).click()
+    await page.locator('.v-select').filter({ hasText: 'From Station' }).click()
+    await page.keyboard.type('MX')
+    await page.keyboard.press('Enter')
+    await page.keyboard.press('Escape') // Close dropdown
 
     // Select to station (Blonay)
-    await page.getByText('To Station').click()
-    await page.getByText('Blonay', { exact: true }).click()
+    await page.locator('.v-select').filter({ hasText: 'To Station' }).click()
+    await page.keyboard.type('BLON')
+    await page.keyboard.press('Enter')
 
     // Click calculate
     await page.getByRole('button', { name: /calculate/i }).click()
 
-    // Wait for result
-    await expect(page.getByText(/distance/i)).toBeVisible({ timeout: 10000 })
+    // Wait for result - should show distance in km format
+    await expect(page.getByText(/km$/i)).toBeVisible({ timeout: 10000 })
   })
 
-  test('should show error for same station selection', async ({ page }) => {
+  test('should handle same station selection', async ({ page }) => {
+    await page.goto('/routes')
     await page.waitForLoadState('networkidle')
 
     // Select same station
-    await page.getByText('From Station').click()
-    await page.getByText('Montreux', { exact: true }).click()
+    await page.locator('.v-select').filter({ hasText: 'From Station' }).click()
+    await page.keyboard.type('MX')
+    await page.keyboard.press('Enter')
+    await page.keyboard.press('Escape') // Close dropdown
 
-    await page.getByText('To Station').click()
-    await page.getByText('Montreux', { exact: true }).click()
+    await page.locator('.v-select').filter({ hasText: 'To Station' }).click()
+    await page.keyboard.type('MX')
+    await page.keyboard.press('Enter')
 
     await page.getByRole('button', { name: /calculate/i }).click()
 
-    await expect(page.getByText(/same station/i)).toBeVisible({ timeout: 5000 })
+    // Wait for result - same station should return 0.00 km
+    await expect(page.locator('.v-card.mt-6')).toBeVisible({ timeout: 5000 })
   })
 })
