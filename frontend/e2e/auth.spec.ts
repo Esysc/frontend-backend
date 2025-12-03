@@ -5,9 +5,7 @@ test.describe('Authentication', () => {
     await page.goto('/auth')
     await page.waitForLoadState('networkidle')
 
-    await expect(
-      page.getByRole('heading', { name: /registration|login/i })
-    ).toBeVisible()
+    await expect(page.getByText(/user registration.*login/i)).toBeVisible()
     await expect(page.getByLabel('Username')).toBeVisible()
     await expect(page.getByLabel('Password')).toBeVisible()
   })
@@ -32,9 +30,8 @@ test.describe('Authentication', () => {
     await page.getByLabel('Password').fill(password)
     await page.getByRole('button', { name: /login/i }).click()
 
-    await expect(page.getByText(/Login successful/i)).toBeVisible({
-      timeout: 10000,
-    })
+    // Wait for navigation to routes page after successful login
+    await page.waitForURL('/routes', { timeout: 10000 })
   })
 
   test('should show error with invalid credentials', async ({ page }) => {

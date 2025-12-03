@@ -30,9 +30,6 @@ export async function loginTestUser(page: Page) {
   // Click login button
   await page.getByRole('button', { name: /login/i }).click()
 
-  // Wait for success message
-  await page.waitForSelector('text=/Login successful/i', { timeout: 10000 })
-
-  // Wait for navigation to routes page
-  await page.waitForURL('/routes', { timeout: 5000 })
+  // Wait for navigation to routes page (login redirects on success)
+  await page.waitForURL('/routes', { timeout: 10000 })
 }
