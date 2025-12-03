@@ -33,20 +33,13 @@ echo "Running migrations..."
 wait_for_db php bin/console doctrine:database:create --if-not-exists
 php bin/console doctrine:schema:update --force || true
 
-# Check if stations table is empty (always load data on first run)
-STATION_COUNT=$(php bin/console dbal:run-sql "SELECT COUNT(*) FROM station" 2>/dev/null | tail -n 1 || echo "0")
+# Load data (command is idempotent - skips existing records)
+echo "Loading data (if needed)..."
+php bin/console app:load-data || true
 
-if [ "$STATION_COUNT" = "0" ] || [ -z "$STATION_COUNT" ]; then
-  echo "Loading data..."
-  wait_for_db php bin/console app:load-data
-
-  # Remove data files after successful load to keep container clean
-  echo "Cleaning up data files..."
-  rm -f /app/stations.json /app/distances.json || true
-  echo "Data files removed"
-else
-  echo "Data already loaded ($STATION_COUNT stations found) - skipping data load"
-fi
+# Remove data files after load attempt to keep container clean
+echo "Cleaning up data files..."
+rm -f /app/stations.json /app/distances.json || true
 
 echo "Starting PHP-FPM..."
 # By default use the PHP built-in webserver on port 8000 so the
