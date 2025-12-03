@@ -1,9 +1,9 @@
 .idea/
 
 # Ignore runtime-generated jwt keys and local certs
+backend/var
 backend/config/jwt/*.pem
 certs/
-backend/var
 
 
 # Dependencies
@@ -32,6 +32,8 @@ build/
 coverage/
 .phpunit.cache/
 .vitest/
+**/playwright-report/
+**/test-results/
 
 # Docker
 db_data/
@@ -44,3 +46,4 @@ logs/
 # OS
 Thumbs.db
 .DS_Store
+node_modules
