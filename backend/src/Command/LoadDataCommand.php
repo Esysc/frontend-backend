@@ -47,6 +47,13 @@ class LoadDataCommand extends Command
         $distancesData = json_decode(file_get_contents($distancesFile), true);
 
         foreach ($stationsData as $stationData) {
+            // Skip if station already exists
+            $existing = $this->entityManager->getRepository(Station::class)
+                ->find((string) $stationData['id']);
+            if ($existing) {
+                continue;
+            }
+
             $station = new Station(
                 (string) $stationData['id'],
                 $stationData['shortName'],
@@ -62,6 +69,17 @@ class LoadDataCommand extends Command
 
         foreach ($distancesData as $lineData) {
             foreach ($lineData['distances'] as $distanceData) {
+                // Check if distance already exists
+                $existing = $this->entityManager->getRepository(Distance::class)
+                    ->findOneBy([
+                        'lineName' => $lineData['name'],
+                        'fromStationId' => $distanceData['parent'],
+                        'toStationId' => $distanceData['child']
+                    ]);
+                if ($existing) {
+                    continue;
+                }
+
                 $distance = new Distance(
                     $lineData['name'],
                     $distanceData['parent'],
