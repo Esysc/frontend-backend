@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\:
+    resource: "../src/"
+    exclude:
+      - "../src/DependencyInjection/"
+      - "../src/Entity/"
+      - "../src/Kernel.php"
+
+  App\Algorithm\DijkstraAlgorithm: ~
+  App\Service\RouteService: ~
+  App\Service\StationService: ~
+  App\Service\AnalyticsService: ~
+  App\Repository\RouteRepository: ~
+  App\Repository\DistanceRepository: ~
+
+parameters:
+  database_url: "%env(resolve:DATABASE_URL)%"

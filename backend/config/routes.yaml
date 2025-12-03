@@ -1,0 +1,8 @@
+controllers:
+  resource: ../src/Controller/
+  type: attribute
+
+app.openapi:
+  path: /api/doc.json
+  methods: GET
+  controller: App\Controller\OpenApiController::doc

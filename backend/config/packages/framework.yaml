@@ -1,0 +1,19 @@
+framework:
+  secret: "%env(APP_SECRET)%"
+  csrf_protection: true
+  http_method_override: false
+  trusted_hosts: null
+  trusted_proxies: null
+  session:
+    handler_id: null
+    cookie_secure: auto
+    cookie_samesite: lax
+  serializer: null
+  test: false
+
+  router:
+    strict_requirements: true
+    utf8: true
+
+  php_errors:
+    log: true
