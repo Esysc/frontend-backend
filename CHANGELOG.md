@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0-rc.1] - 2025-12-04
 
 ### Added
 
@@ -34,4 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - npm audit for dependency vulnerability scanning
 - Secure password hashing with Symfony security component
 
-[Unreleased]: https://github.com/Esysc/defi-fullstack/compare/main...feature/solution-v1
+## [Unreleased]
+
+[Unreleased]: https://github.com/Esysc/defi-fullstack/compare/v1.0.0-rc.1...feature/solution-v1
+[1.0.0-rc.1]: https://github.com/Esysc/defi-fullstack/releases/tag/v1.0.0-rc.1
