@@ -1,0 +1,311 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'nektos/act' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache pre-commit
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Run pre-commit hooks
+        uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: "--all-files"
+  backend-tests:
+    needs: pre-commit
+    if: ${{ github.actor == 'nektos/act' || (always() && (needs.pre-commit.result == 'success' || needs.pre-commit.result == 'skipped')) }}
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo, pdo_pgsql, json
+          tools: composer
+
+      - name: Install Composer dependencies
+        working-directory: ./backend
+        run: composer install
+
+      - name: Generate temporary JWT keys for tests
+        working-directory: .
+        run: |
+          mkdir -p backend/config/jwt
+          openssl genpkey -algorithm RSA -out backend/config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096 2>/dev/null
+          openssl rsa -in backend/config/jwt/private.pem -pubout -out backend/config/jwt/public.pem 2>/dev/null
+          chmod 600 backend/config/jwt/private.pem
+
+      - name: Generate self-signed certs for local test environment
+        run: |
+          mkdir -p certs
+          openssl req -x509 -newkey rsa:4096 -nodes -out certs/cert.pem -keyout certs/key.pem -days 365 -subj "/CN=localhost" 2>/dev/null
+
+      - name: Verify keys + certs exist (backend)
+        run: |
+          bash ./scripts/verify-keys.sh
+
+      - name: Run PHPUnit tests
+        working-directory: ./backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        run: vendor/bin/phpunit --no-coverage
+
+      - name: PHP syntax check
+        working-directory: ./backend
+        run: |
+          set -e
+          files=$(git ls-files "backend/src/**/*.php" || true)
+          if [ -n "$files" ]; then
+            for f in $files; do
+              php -l "$f" || exit 1
+            done
+          fi
+
+      - name: Generate coverage report
+        timeout-minutes: 5
+        working-directory: ./backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
+      - name: Assert PHPUnit coverage threshold
+        working-directory: ./backend
+        run: |
+          set -e
+          if [ ! -f coverage.xml ]; then
+            echo "coverage.xml not found"; exit 1
+          fi
+          statements=$(grep -oP 'statements="\K[0-9]+' coverage.xml | head -1 || echo 0)
+          covered=$(grep -oP 'coveredstatements="\K[0-9]+' coverage.xml | head -1 || echo 0)
+          if [ "$statements" -eq 0 ]; then
+            echo "No statements found in coverage.xml"; exit 1
+          fi
+          pct=$(awk "BEGIN {printf \"%.2f\", (${covered}/${statements})*100}")
+          echo "PHPUnit coverage: ${pct}%"
+          awk "BEGIN { if (${pct} < 50) exit 2 }"
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./backend/coverage.xml
+
+      - name: Run PHPStan (SAST)
+        working-directory: ./backend
+        run: |
+          composer require --dev phpstan/phpstan --with-all-dependencies
+          vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress
+
+  frontend-tests:
+    needs: pre-commit
+    if: ${{ github.actor == 'nektos/act' || (always() && (needs.pre-commit.result == 'success' || needs.pre-commit.result == 'skipped')) }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "frontend/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Generate self-signed certs for frontend tests
+        run: |
+          mkdir -p certs
+          openssl req -x509 -newkey rsa:4096 -nodes -out certs/cert.pem -keyout certs/key.pem -days 365 -subj "/CN=localhost" 2>/dev/null
+
+      - name: Spectral lint OpenAPI
+        shell: bash
+        run: npx -y @stoplight/spectral-cli lint openapi.yml --ruleset .spectral.yml
+        working-directory: .
+
+      - name: Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Run tests
+        working-directory: ./frontend
+        run: npm run test
+
+      - name: Run coverage and assert threshold
+        working-directory: ./frontend
+        run: |
+          npm run coverage
+          node -e "const fs=require('fs'); const p='coverage/coverage-summary.json'; if(!fs.existsSync(p)){console.error('coverage file missing'); process.exit(1);} const c=JSON.parse(fs.readFileSync(p,'utf8')); const pct=c.total.lines.pct; console.log('Frontend lines coverage',pct); if(pct<50){console.error('Coverage threshold not met (50%)'); process.exit(1);}"
+
+      - name: Upload frontend coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./frontend/coverage/lcov.info
+
+      - name: Run type check
+        working-directory: ./frontend
+        run: npm run type-check
+
+      - name: Build
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Run npm audit (dependency vulnerability scan)
+        working-directory: ./frontend
+        run: npm audit --audit-level=high
+
+  e2e-tests:
+    needs: [backend-tests, frontend-tests]
+    if: ${{ github.actor == 'nektos/act' || (always() && needs.backend-tests.result == 'success' && needs.frontend-tests.result == 'success') }}
+    runs-on: ubuntu-latest
+    # No service postgres needed - docker-compose provides full stack
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: ./frontend
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Install docker-compose
+        run: |
+          if ! command -v docker-compose &> /dev/null; then
+            curl -L "https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+          fi
+          docker-compose --version
+
+      - name: Generate self-signed certs for nginx
+        run: |
+          mkdir -p nginx/certs
+          openssl req -x509 -newkey rsa:4096 -keyout nginx/certs/key.pem -out nginx/certs/cert.pem -sha256 -days 1 -nodes -subj "/CN=localhost"
+
+      - name: Start services with docker-compose
+        run: |
+          docker-compose up -d
+          echo "Waiting for services to be ready..."
+          sleep 30
+
+      - name: Check service health
+        run: |
+          docker-compose ps
+          curl -k https://localhost:8443/api/v1/stations || echo "Backend not ready yet"
+
+      - name: Run E2E tests
+        working-directory: ./frontend
+        run: npm run test:e2e
+
+      # Skip artifact upload when running locally with act (nektos/act sets github.actor to 'nektos/act')
+      - name: Upload Playwright report
+        if: github.actor != 'nektos/act'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 7
+
+      - name: Stop docker-compose services
+        if: always()
+        run: docker-compose down -v
+
+  docker-build:
+    needs: [backend-tests, frontend-tests]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: false
+          load: true
+          tags: defi-fullstack-backend:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy security scan on backend image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: defi-fullstack-backend:test
+          format: "sarif"
+          output: "trivy-backend-results.sarif"
+          severity: "CRITICAL,HIGH"
+
+      - name: Upload Trivy backend results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: "trivy-backend-results.sarif"
+          category: "trivy-backend"
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: false
+          load: true
+          tags: defi-fullstack-frontend:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy security scan on frontend image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: defi-fullstack-frontend:test
+          format: "sarif"
+          output: "trivy-frontend-results.sarif"
+          severity: "CRITICAL,HIGH"
+
+      - name: Upload Trivy frontend results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: "trivy-frontend-results.sarif"
+          category: "trivy-frontend"

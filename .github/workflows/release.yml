@@ -1,0 +1,186 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  packages: write
+  security-events: write
+
+jobs:
+  release:
+    if: ${{ github.actor != 'nektos/act' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+
+          echo "## What's Changed" > CHANGELOG.txt
+          echo "" >> CHANGELOG.txt
+
+          if [ -z "$PREV_TAG" ]; then
+            # First release, get all commits
+            git log --pretty=format:"- %s (%h)" >> CHANGELOG.txt
+          else
+            # Get commits since previous tag
+            git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" >> CHANGELOG.txt
+          fi
+
+          echo "" >> CHANGELOG.txt
+          echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${CURRENT_TAG}" >> CHANGELOG.txt
+
+          cat CHANGELOG.txt
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: CHANGELOG.txt
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docker-release:
+    needs: release
+    if: ${{ github.actor != 'nektos/act' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for backend
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/backend
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}},enable=${{ !contains(github.ref, '-') }}
+            type=semver,pattern={{major}},enable=${{ !contains(github.ref, '-') }}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          load: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy security scan on backend image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ fromJSON(steps.meta-backend.outputs.json).tags[0] }}
+          format: "sarif"
+          output: "trivy-backend-results.sarif"
+          severity: "CRITICAL,HIGH"
+        continue-on-error: true
+
+      - name: Upload Trivy backend results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always() && hashFiles('trivy-backend-results.sarif') != ''
+        with:
+          sarif_file: "trivy-backend-results.sarif"
+          category: "trivy-backend"
+
+      - name: Extract metadata for frontend
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/frontend
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}},enable=${{ !contains(github.ref, '-') }}
+            type=semver,pattern={{major}},enable=${{ !contains(github.ref, '-') }}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          load: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy security scan on frontend image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ fromJSON(steps.meta-frontend.outputs.json).tags[0] }}
+          format: "sarif"
+          output: "trivy-frontend-results.sarif"
+          severity: "CRITICAL,HIGH"
+        continue-on-error: true
+
+      - name: Upload Trivy frontend results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always() && hashFiles('trivy-frontend-results.sarif') != ''
+        with:
+          sarif_file: "trivy-frontend-results.sarif"
+          category: "trivy-frontend"
+
+      - name: Extract metadata for nginx
+        id: meta-nginx
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/nginx
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}},enable=${{ !contains(github.ref, '-') }}
+            type=semver,pattern={{major}},enable=${{ !contains(github.ref, '-') }}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push nginx image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./nginx
+          file: ./nginx/Dockerfile
+          push: true
+          load: true
+          tags: ${{ steps.meta-nginx.outputs.tags }}
+          labels: ${{ steps.meta-nginx.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy security scan on nginx image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ fromJSON(steps.meta-nginx.outputs.json).tags[0] }}
+          format: "sarif"
+          output: "trivy-nginx-results.sarif"
+          severity: "CRITICAL,HIGH"
+        continue-on-error: true
+
+      - name: Upload Trivy nginx results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always() && hashFiles('trivy-nginx-results.sarif') != ''
+        with:
+          sarif_file: "trivy-nginx-results.sarif"
+          category: "trivy-nginx"

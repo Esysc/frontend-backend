@@ -1,1 +1,49 @@
 .idea/
+
+# Ignore runtime-generated jwt keys and local certs
+backend/var
+backend/config/jwt/*.pem
+certs/
+
+
+# Dependencies
+node_modules/
+vendor/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+coverage/
+.phpunit.cache/
+.vitest/
+**/playwright-report/
+**/test-results/
+
+# Docker
+db_data/
+certs/
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+.DS_Store
+node_modules

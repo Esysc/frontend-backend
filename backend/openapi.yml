@@ -31,7 +31,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RouteRequest'
+              $ref: "#/components/schemas/RouteRequest"
             examples:
               default:
                 value:
@@ -39,24 +39,24 @@ paths:
                   toStationId: "ZW"
                   analyticCode: "ANA-123"
       responses:
-        '201':
+        "201":
           description: Trajet calculé
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Route'
-        '400':
+                $ref: "#/components/schemas/Route"
+        "400":
           description: Requête invalide
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Données non valides (ex. station inconnue, réseau non connexe)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
   /stats/distances:
     get:
@@ -92,18 +92,18 @@ paths:
             enum: [day, month, year, none]
             default: none
       responses:
-        '200':
+        "200":
           description: Agrégations de distances
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AnalyticDistanceList'
-        '400':
+                $ref: "#/components/schemas/AnalyticDistanceList"
+        "400":
           description: Paramètres invalides (ex. from > to)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 
 components:
   securitySchemes:
@@ -197,7 +197,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/AnalyticDistance'
+            $ref: "#/components/schemas/AnalyticDistance"
       required: [items]
 
     Error:
