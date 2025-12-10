@@ -2,7 +2,7 @@ version: 2
 updates:
   # PHP/Composer backend (likely at root)
   - package-ecosystem: "composer"
-    directory: "/"
+    directory: "/backend"
     schedule:
       interval: "weekly"
       time: "04:00"
