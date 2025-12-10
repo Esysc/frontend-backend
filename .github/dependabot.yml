@@ -15,7 +15,7 @@ updates:
 
   # Vue.js/npm frontend
   - package-ecosystem: "npm"
-    directory: "/frontend"  # Confirm/adjust path from your package.json
+    directory: "/frontend" # Confirm/adjust path from your package.json
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
