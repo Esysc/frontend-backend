@@ -39,7 +39,7 @@ updates:
           - "eslint"
 
   # Docker: root Dockerfile (applicable images referenced at repo root)
-  - package-ecosystem: "docker"
+  - package-ecosystem: "docker-compose"
     directory: "/"
     schedule:
       interval: "weekly"
