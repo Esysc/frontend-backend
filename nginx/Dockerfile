@@ -1,4 +1,4 @@
-FROM nginx:1.29.3-alpine-slim
+FROM nginx:1.29.4-alpine-slim
 
 # Install OpenSSL for certificate generation
 RUN apk add --no-cache openssl

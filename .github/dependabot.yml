@@ -37,25 +37,24 @@ updates:
     open-pull-requests-limit: 3
     labels: ["dependencies", "docker"]
     target-branch: "main"
-  
+
   - package-ecosystem: "docker"
     directory: "/frontend"
     schedule:
       interval: "weekly"
     labels: ["dependencies", "docker"]
-  
+
   - package-ecosystem: "docker"
     directory: "/nginx"
     schedule:
       interval: "weekly"
     labels: ["dependencies", "docker"]
-  
+
   - package-ecosystem: "docker"
     directory: "/backend"
     schedule:
       interval: "weekly"
     labels: ["dependencies", "docker"]
-
 
   # GitHub Actions (your ci-cd.yml workflows)
   - package-ecosystem: "github-actions"
