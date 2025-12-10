@@ -33,7 +33,7 @@
     "@vue/test-utils": "^2.4.6",
     "@playwright/test": "^1.49.1",
     "eslint": "^9.5.0",
-    "eslint-plugin-vue": "^9.30.0",
+    "eslint-plugin-vue": "^10.6.2",
     "jsdom": "^27.0.1",
     "playwright": "^1.49.1",
     "prettier": "^3.7.4",
