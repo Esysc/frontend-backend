@@ -26,7 +26,7 @@
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20.19.26",
     "@typescript-eslint/eslint-plugin": "^8.8.1",
-    "@typescript-eslint/parser": "^8.8.1",
+    "@typescript-eslint/parser": "^8.49.0",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vitest/coverage-v8": "^4.0.14",
     "@vitest/ui": "^4.0.14",
