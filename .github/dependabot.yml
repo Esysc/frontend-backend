@@ -23,6 +23,11 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+    groups:
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
 
   # Docker images (php-fpm, nginx, postgres from your stack)
   - package-ecosystem: "docker"
