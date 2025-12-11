@@ -1,0 +1,106 @@
+PHPUnit Started (PHPUnit 11.5.46 using PHP 8.5.0 (cli) on Darwin)
+Test Runner Configured
+Bootstrap Finished (/Users/andreacristalli/repo/defi-fullstack/backend/tests/bootstrap.php)
+Event Facade Sealed
+Test Suite Loaded (8 tests)
+Test Runner Started
+Test Suite Sorted
+Test Runner Execution Started (8 tests)
+Test Suite Started (/Users/andreacristalli/repo/defi-fullstack/backend/phpunit.xml.dist, 8 tests)
+Test Suite Started (Project Test Suite, 8 tests)
+Test Suite Started (App\Tests\Controller\AuthControllerTest, 1 test)
+Test Preparation Started (App\Tests\Controller\AuthControllerTest::testRegisterAndLogin)
+Test Prepared (App\Tests\Controller\AuthControllerTest::testRegisterAndLogin)
+Test Errored (App\Tests\Controller\AuthControllerTest::testRegisterAndLogin)
+Environment variable not found: "DATABASE_URL".
+After Test Method Called (App\Tests\Controller\AuthControllerTest::tearDown)
+After Test Method Errored (App\Tests\Controller\AuthControllerTest::tearDown)
+Environment variable not found: "DATABASE_URL".
+After Test Method Finished:
+- App\Tests\Controller\AuthControllerTest::tearDown
+Test Finished (App\Tests\Controller\AuthControllerTest::testRegisterAndLogin)
+After Last Test Method Called (App\Tests\Controller\AuthControllerTest::tearDownAfterClass)
+After Last Test Method Errored (App\Tests\Controller\AuthControllerTest::tearDownAfterClass)
+Environment variable not found: "DATABASE_URL".
+After Last Test Method Finished:
+- App\Tests\Controller\AuthControllerTest::tearDownAfterClass
+Test Suite Finished (App\Tests\Controller\AuthControllerTest, 1 test)
+Test Suite Started (App\Tests\Controller\RouteControllerTest, 2 tests)
+Test Preparation Started (App\Tests\Controller\RouteControllerTest::testCreateRouteInvalidStationReturns422)
+Test Prepared (App\Tests\Controller\RouteControllerTest::testCreateRouteInvalidStationReturns422)
+Test Errored (App\Tests\Controller\RouteControllerTest::testCreateRouteInvalidStationReturns422)
+Booting the kernel before calling "Symfony\Bundle\FrameworkBundle\Test\WebTestCase::createClient()" is not supported, the kernel should only be booted once.
+After Test Method Called (App\Tests\Controller\RouteControllerTest::tearDown)
+After Test Method Errored (App\Tests\Controller\RouteControllerTest::tearDown)
+Environment variable not found: "DATABASE_URL".
+After Test Method Finished:
+- App\Tests\Controller\RouteControllerTest::tearDown
+Test Finished (App\Tests\Controller\RouteControllerTest::testCreateRouteInvalidStationReturns422)
+Test Preparation Started (App\Tests\Controller\RouteControllerTest::testCreateRouteReturns201AndPersists)
+Test Prepared (App\Tests\Controller\RouteControllerTest::testCreateRouteReturns201AndPersists)
+Test Errored (App\Tests\Controller\RouteControllerTest::testCreateRouteReturns201AndPersists)
+Booting the kernel before calling "Symfony\Bundle\FrameworkBundle\Test\WebTestCase::createClient()" is not supported, the kernel should only be booted once.
+After Test Method Called (App\Tests\Controller\RouteControllerTest::tearDown)
+After Test Method Errored (App\Tests\Controller\RouteControllerTest::tearDown)
+Environment variable not found: "DATABASE_URL".
+After Test Method Finished:
+- App\Tests\Controller\RouteControllerTest::tearDown
+Test Finished (App\Tests\Controller\RouteControllerTest::testCreateRouteReturns201AndPersists)
+After Last Test Method Called (App\Tests\Controller\RouteControllerTest::tearDownAfterClass)
+After Last Test Method Errored (App\Tests\Controller\RouteControllerTest::tearDownAfterClass)
+Environment variable not found: "DATABASE_URL".
+After Last Test Method Finished:
+- App\Tests\Controller\RouteControllerTest::tearDownAfterClass
+Test Suite Finished (App\Tests\Controller\RouteControllerTest, 2 tests)
+Test Suite Started (App\Tests\Controller\AnalyticsControllerTest, 1 test)
+Test Preparation Started (App\Tests\Controller\AnalyticsControllerTest::testGetAnalyticsReturnsAggregatedResult)
+Test Prepared (App\Tests\Controller\AnalyticsControllerTest::testGetAnalyticsReturnsAggregatedResult)
+Test Errored (App\Tests\Controller\AnalyticsControllerTest::testGetAnalyticsReturnsAggregatedResult)
+Booting the kernel before calling "Symfony\Bundle\FrameworkBundle\Test\WebTestCase::createClient()" is not supported, the kernel should only be booted once.
+After Test Method Called (App\Tests\Controller\AnalyticsControllerTest::tearDown)
+After Test Method Errored (App\Tests\Controller\AnalyticsControllerTest::tearDown)
+Environment variable not found: "DATABASE_URL".
+After Test Method Finished:
+- App\Tests\Controller\AnalyticsControllerTest::tearDown
+Test Finished (App\Tests\Controller\AnalyticsControllerTest::testGetAnalyticsReturnsAggregatedResult)
+After Last Test Method Called (App\Tests\Controller\AnalyticsControllerTest::tearDownAfterClass)
+After Last Test Method Errored (App\Tests\Controller\AnalyticsControllerTest::tearDownAfterClass)
+Environment variable not found: "DATABASE_URL".
+After Last Test Method Finished:
+- App\Tests\Controller\AnalyticsControllerTest::tearDownAfterClass
+Test Suite Finished (App\Tests\Controller\AnalyticsControllerTest, 1 test)
+Test Suite Started (App\Tests\Algorithm\DijkstraAlgorithmTest, 4 tests)
+Test Preparation Started (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathSameStation)
+Before Test Method Called (App\Tests\Algorithm\DijkstraAlgorithmTest::setUp)
+Before Test Method Finished:
+- App\Tests\Algorithm\DijkstraAlgorithmTest::setUp
+Test Prepared (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathSameStation)
+Test Passed (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathSameStation)
+Test Finished (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathSameStation)
+Test Preparation Started (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathSimple)
+Before Test Method Called (App\Tests\Algorithm\DijkstraAlgorithmTest::setUp)
+Before Test Method Finished:
+- App\Tests\Algorithm\DijkstraAlgorithmTest::setUp
+Test Prepared (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathSimple)
+Test Passed (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathSimple)
+Test Finished (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathSimple)
+Test Preparation Started (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathDisconnected)
+Before Test Method Called (App\Tests\Algorithm\DijkstraAlgorithmTest::setUp)
+Before Test Method Finished:
+- App\Tests\Algorithm\DijkstraAlgorithmTest::setUp
+Test Prepared (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathDisconnected)
+Test Passed (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathDisconnected)
+Test Finished (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathDisconnected)
+Test Preparation Started (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathInvalidStart)
+Before Test Method Called (App\Tests\Algorithm\DijkstraAlgorithmTest::setUp)
+Before Test Method Finished:
+- App\Tests\Algorithm\DijkstraAlgorithmTest::setUp
+Test Prepared (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathInvalidStart)
+Test Passed (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathInvalidStart)
+Test Finished (App\Tests\Algorithm\DijkstraAlgorithmTest::testFindShortestPathInvalidStart)
+Test Suite Finished (App\Tests\Algorithm\DijkstraAlgorithmTest, 4 tests)
+Test Suite Finished (Project Test Suite, 8 tests)
+Test Suite Finished (/Users/andreacristalli/repo/defi-fullstack/backend/phpunit.xml.dist, 8 tests)
+Test Runner Execution Finished
+Test Runner Finished
+PHPUnit Finished (Shell Exit Code: 2)
