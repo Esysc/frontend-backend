@@ -1,5 +1,7 @@
 lexik_jwt_authentication:
-  private_key_path: "%kernel.project_dir%/config/jwt/private.pem"
-  public_key_path: "%kernel.project_dir%/config/jwt/public.pem"
+  # New configuration keys: use `secret_key` and `public_key`.
+  # The values can be either a raw key or a path to a key file.
+  secret_key: "%kernel.project_dir%/config/jwt/private.pem"
+  public_key: "%kernel.project_dir%/config/jwt/public.pem"
   pass_phrase: ""
   token_ttl: 3600
