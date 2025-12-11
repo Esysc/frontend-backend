@@ -17,7 +17,7 @@
     "symfony/http-foundation": "^7.0",
     "symfony/validator": "^8.0",
     "symfony/maker-bundle": "^1.53",
-    "lexik/jwt-authentication-bundle": "^2.15",
+    "lexik/jwt-authentication-bundle": "^3.1",
     "nesbot/carbon": "^3.0",
     "symfony/yaml": "^8.0"
   },
