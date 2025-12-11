@@ -207,29 +207,21 @@ jobs:
       - name: Install Playwright browsers
         working-directory: ./frontend
         run: npx playwright install --with-deps chromium firefox webkit
-
-      - name: Install docker-compose
-        run: |
-          if ! command -v docker-compose &> /dev/null; then
-            curl -L "https://github.com/docker/compose/releases/download/v5.0.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-          fi
-          docker-compose --version
-
       - name: Generate self-signed certs for nginx
         run: |
           mkdir -p nginx/certs
           openssl req -x509 -newkey rsa:4096 -keyout nginx/certs/key.pem -out nginx/certs/cert.pem -sha256 -days 1 -nodes -subj "/CN=localhost"
 
-      - name: Start services with docker-compose
+      - name: Start services with docker-compose V2
         run: |
-          docker-compose up -d
+          docker compose up -d  # Note: "compose" not "docker-compose"
           echo "Waiting for services to be ready..."
           sleep 30
+          docker compose ps     # Verify all services running
 
       - name: Check service health
         run: |
-          docker-compose ps
+          docker compose ps
           curl -k https://localhost:8443/api/v1/stations || echo "Backend not ready yet"
 
       - name: Run E2E tests
@@ -245,9 +237,9 @@ jobs:
           path: frontend/playwright-report/
           retention-days: 7
 
-      - name: Stop docker-compose services
+      - name: Stop docker compose services
         if: always()
-        run: docker-compose down -v
+        run: docker compose down -v
 
   docker-build:
     needs: [backend-tests, frontend-tests]
