@@ -14,9 +14,15 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
-        browser: true,
-        node: true,
-        es2021: true,
+        // Browser globals used across the app
+        window: 'readonly',
+        document: 'readonly',
+        localStorage: 'readonly',
+        Event: 'readonly',
+        HTMLElement: 'readonly',
+        console: 'readonly',
+        // keep node typings as readonly where used in build/test tools
+        process: 'readonly',
       },
       parser: vueParser, // ✅ Vue parser FIRST
       parserOptions: {
