@@ -270,6 +270,15 @@ jobs:
           output: "trivy-backend-results.sarif"
           severity: "CRITICAL,HIGH"
 
+      - name: Print Trivy backend summary
+        run: |
+          echo "Summary of vulnerabilities for backend image (defi-fullstack-backend:test):"
+          if [ -f trivy-backend-results.sarif ]; then
+            jq '.runs[].results[] | {ruleId, message: .message.text}' trivy-backend-results.sarif || echo "No vulnerabilities found or jq not available."
+          else
+            echo "No SARIF file found."
+          fi
+
       - name: Upload Trivy backend results to GitHub Security
         uses: github/codeql-action/upload-sarif@v4
         if: always()
@@ -294,6 +303,15 @@ jobs:
           format: "sarif"
           output: "trivy-frontend-results.sarif"
           severity: "CRITICAL,HIGH"
+
+      - name: Print Trivy frontend summary
+        run: |
+          echo "Summary of vulnerabilities for frontend image (defi-fullstack-frontend:test):"
+          if [ -f trivy-frontend-results.sarif ]; then
+            jq '.runs[].results[] | {ruleId, message: .message.text}' trivy-frontend-results.sarif || echo "No vulnerabilities found or jq not available."
+          else
+            echo "No SARIF file found."
+          fi
 
       - name: Upload Trivy frontend results to GitHub Security
         uses: github/codeql-action/upload-sarif@v4
