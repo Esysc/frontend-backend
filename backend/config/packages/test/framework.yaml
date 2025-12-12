@@ -1,2 +1,7 @@
 framework:
   test: true
+  router:
+    resource: "%kernel.project_dir%/config/routes.yaml"
+    strict_requirements: true
+  profiler:
+    enabled: false
