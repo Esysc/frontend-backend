@@ -173,8 +173,6 @@ The project includes a comprehensive CI/CD pipeline configured in `.github/workf
 
 ✅ **Security** — HTTPS, JWT auth, secure headers, secret management
 
-✅ **Quality** — Readable code, atomic commits, coherent architecture
-
 
 ## Tests and quality checks
 
