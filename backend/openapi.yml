@@ -2,10 +2,6 @@ openapi: 3.1.1
 info:
   title: Train routing & analytics API
   version: 1.0.0
-  contact:
-    name: Nicolas Girardet
-    email: n.girardet@mob.ch
-    url: https://github.com/montreux-oberland-bernois/defi-fullstack
   description: >
     API pour router un train d'une station A à B sur un réseau, calculer la
     distance parcourue et fournir des statistiques agrégées par code analytique.

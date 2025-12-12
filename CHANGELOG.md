@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded CodeQL workflow version from v3 to v4[attached_file:1].
 - Vue frontend: Multi-stage Node → nginx (~25MB production image).
 
-[1.0.0]: https://github.com/Esysc/defi-fullstack/releases/tag/v1.0.0
+[1.0.0]: https://github.com/Esysc/wep-app-fullstack/releases/tag/v1.0.0
 
 ## [1.0.0-rc.1] - 2025-12-04
 
@@ -43,8 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - npm audit for dependency vulnerability scanning.
 - Secure password hashing with Symfony security component.
 
-[1.0.0-rc.1]: https://github.com/Esysc/defi-fullstack/releases/tag/v1.0.0-rc.1
+[1.0.0-rc.1]: https://github.com/Esysc/wep-app-fullstack/releases/tag/v1.0.0-rc.1
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Esysc/defi-fullstack/compare/v1.0.0...HEAD[web:3].
+[Unreleased]: https://github.com/Esysc/wep-app-fullstack/compare/v1.0.0...HEAD[web:3].

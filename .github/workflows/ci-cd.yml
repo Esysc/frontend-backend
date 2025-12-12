@@ -258,21 +258,21 @@ jobs:
           context: ./backend
           push: false
           load: true
-          tags: defi-fullstack-backend:test
+          tags: wep-app-fullstack-backend:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run Trivy security scan on backend image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: defi-fullstack-backend:test
+          image-ref: wep-app-fullstack-backend:test
           format: "sarif"
           output: "trivy-backend-results.sarif"
           severity: "CRITICAL,HIGH"
 
       - name: Print Trivy backend summary
         run: |
-          echo "Summary of vulnerabilities for backend image (defi-fullstack-backend:test):"
+          echo "Summary of vulnerabilities for backend image (wep-app-fullstack-backend:test):"
           if [ -f trivy-backend-results.sarif ]; then
             jq '.runs[].results[] | {ruleId, message: .message.text}' trivy-backend-results.sarif || echo "No vulnerabilities found or jq not available."
           else
@@ -292,21 +292,21 @@ jobs:
           context: ./frontend
           push: false
           load: true
-          tags: defi-fullstack-frontend:test
+          tags: wep-app-fullstack-frontend:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run Trivy security scan on frontend image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: defi-fullstack-frontend:test
+          image-ref: wep-app-fullstack-frontend:test
           format: "sarif"
           output: "trivy-frontend-results.sarif"
           severity: "CRITICAL,HIGH"
 
       - name: Print Trivy frontend summary
         run: |
-          echo "Summary of vulnerabilities for frontend image (defi-fullstack-frontend:test):"
+          echo "Summary of vulnerabilities for frontend image (wep-app-fullstack-frontend:test):"
           if [ -f trivy-frontend-results.sarif ]; then
             jq '.runs[].results[] | {ruleId, message: .message.text}' trivy-frontend-results.sarif || echo "No vulnerabilities found or jq not available."
           else

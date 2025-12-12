@@ -2,10 +2,10 @@
 
 ## CI/CD Status
 
-**Pipeline:** [![CI/CD](https://img.shields.io/github/actions/workflow/status/Esysc/defi-fullstack/ci-cd.yml?label=pipeline)](https://github.com/Esysc/defi-fullstack/actions/workflows/ci-cd.yml)
-**Pre-commit:** [![pre-commit](https://img.shields.io/github/actions/workflow/status/Esysc/defi-fullstack/ci-cd.yml?job=pre-commit&label=pre-commit)](https://github.com/Esysc/defi-fullstack/actions/workflows/ci-cd.yml)
-**Backend:** [![backend](https://img.shields.io/github/actions/workflow/status/Esysc/defi-fullstack/ci-cd.yml?job=backend-tests&label=backend)](https://github.com/Esysc/defi-fullstack/actions/workflows/ci-cd.yml)
-**Frontend:** [![frontend](https://img.shields.io/github/actions/workflow/status/Esysc/defi-fullstack/ci-cd.yml?job=frontend-tests&label=frontend)](https://github.com/Esysc/defi-fullstack/actions/workflows/ci-cd.yml)
+**Pipeline:** [![CI/CD](https://img.shields.io/github/actions/workflow/status/Esysc/wep-app-fullstack/ci-cd.yml?label=pipeline)](https://github.com/Esysc/wep-app-fullstack/actions/workflows/ci-cd.yml)
+**Pre-commit:** [![pre-commit](https://img.shields.io/github/actions/workflow/status/Esysc/wep-app-fullstack/ci-cd.yml?job=pre-commit&label=pre-commit)](https://github.com/Esysc/wep-app-fullstack/actions/workflows/ci-cd.yml)
+**Backend:** [![backend](https://img.shields.io/github/actions/workflow/status/Esysc/wep-app-fullstack/ci-cd.yml?job=backend-tests&label=backend)](https://github.com/Esysc/wep-app-fullstack/actions/workflows/ci-cd.yml)
+**Frontend:** [![frontend](https://img.shields.io/github/actions/workflow/status/Esysc/wep-app-fullstack/ci-cd.yml?job=frontend-tests&label=frontend)](https://github.com/Esysc/wep-app-fullstack/actions/workflows/ci-cd.yml)
 
 A production-ready full-stack application demonstrating train route calculation and analytics. This project showcases modern web development practices with Symfony backend, Vue 3 frontend, comprehensive testing, and automated CI/CD pipeline.
 

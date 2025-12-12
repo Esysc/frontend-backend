@@ -57,15 +57,15 @@ The project uses automated releases via GitHub Actions. When a version tag is pu
    After the workflow completes:
 
    - **Docker Images**: Verify images are published to GHCR:
-     - `ghcr.io/esysc/defi-fullstack/backend:1.0.0`
-     - `ghcr.io/esysc/defi-fullstack/backend:1.0`
-     - `ghcr.io/esysc/defi-fullstack/backend:1`
-     - `ghcr.io/esysc/defi-fullstack/frontend:1.0.0`
-     - `ghcr.io/esysc/defi-fullstack/frontend:1.0`
-     - `ghcr.io/esysc/defi-fullstack/frontend:1`
-     - `ghcr.io/esysc/defi-fullstack/nginx:1.0.0`
-     - `ghcr.io/esysc/defi-fullstack/nginx:1.0`
-     - `ghcr.io/esysc/defi-fullstack/nginx:1`
+   - `ghcr.io/esysc/wep-app-fullstack/backend:1.0.0`
+   - `ghcr.io/esysc/wep-app-fullstack/backend:1.0`
+   - `ghcr.io/esysc/wep-app-fullstack/backend:1`
+   - `ghcr.io/esysc/wep-app-fullstack/frontend:1.0.0`
+   - `ghcr.io/esysc/wep-app-fullstack/frontend:1.0`
+   - `ghcr.io/esysc/wep-app-fullstack/frontend:1`
+   - `ghcr.io/esysc/wep-app-fullstack/nginx:1.0.0`
+   - `ghcr.io/esysc/wep-app-fullstack/nginx:1.0`
+   - `ghcr.io/esysc/wep-app-fullstack/nginx:1`
 
 ## Semantic Versioning
 
@@ -110,10 +110,10 @@ Each release creates multiple Docker image tags:
 
 ```bash
 # Semantic version tags
-ghcr.io/esysc/defi-fullstack/backend:1.2.3  # Full version
-ghcr.io/esysc/defi-fullstack/backend:1.2    # Minor version
-ghcr.io/esysc/defi-fullstack/backend:1      # Major version
-ghcr.io/esysc/defi-fullstack/backend:latest # Latest release (main branch only)
+ghcr.io/esysc/wep-app-fullstack/backend:1.2.3  # Full version
+ghcr.io/esysc/wep-app-fullstack/backend:1.2    # Minor version
+ghcr.io/esysc/wep-app-fullstack/backend:1      # Major version
+ghcr.io/esysc/wep-app-fullstack/backend:latest # Latest release (main branch only)
 ```
 
 This allows users to:
@@ -149,8 +149,8 @@ If a release has critical issues:
    Users should pin to the previous stable version:
 
    ```bash
-   docker pull ghcr.io/esysc/defi-fullstack/backend:0.9.0
-   docker pull ghcr.io/esysc/defi-fullstack/frontend:0.9.0
+   docker pull ghcr.io/esysc/wep-app-fullstack/backend:0.9.0
+   docker pull ghcr.io/esysc/wep-app-fullstack/frontend:0.9.0
    ```
 
 4. **Issue Hotfix**
