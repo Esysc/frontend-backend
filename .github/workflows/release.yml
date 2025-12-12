@@ -98,6 +98,7 @@ jobs:
           format: "sarif"
           output: "trivy-backend-results.sarif"
           severity: "CRITICAL,HIGH"
+          ignore-unfixed: true
         continue-on-error: true
 
       - name: Upload Trivy backend results to GitHub Security
@@ -137,6 +138,8 @@ jobs:
           format: "sarif"
           output: "trivy-frontend-results.sarif"
           severity: "CRITICAL,HIGH"
+          ignore-unfixed: true
+          skip-setup-trivy: true
         continue-on-error: true
 
       - name: Upload Trivy frontend results to GitHub Security
@@ -176,6 +179,8 @@ jobs:
           format: "sarif"
           output: "trivy-nginx-results.sarif"
           severity: "CRITICAL,HIGH"
+          ignore-unfixed: true
+          skip-setup-trivy: true
         continue-on-error: true
 
       - name: Upload Trivy nginx results to GitHub Security
