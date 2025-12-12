@@ -6,6 +6,9 @@ on:
 
 jobs:
   automerge:
+    permissions:
+      contents: read
+      pull-requests: write
     name: Auto-merge Dependabot PRs when checks pass
     runs-on: ubuntu-latest
     steps:
