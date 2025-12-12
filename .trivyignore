@@ -1,0 +1,3 @@
+# Ignore kernel audio driver vulns (not used in DeFi app)
+cve:CVE-2025-40344 pkg_name:linux-libc-dev
+cve:CVE-2025-40344 pkg_name:linux-headers
