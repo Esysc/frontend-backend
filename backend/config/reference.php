@@ -128,7 +128,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     http_method_override?: bool, // Set true to enable support for the '_method' request parameter to determine the intended HTTP method on POST requests. // Default: false
  *     allowed_http_method_override?: list<string>|null,
  *     trust_x_sendfile_type_header?: scalar|null, // Set true to enable support for xsendfile in binary file responses. // Default: "%env(bool:default::SYMFONY_TRUST_X_SENDFILE_TYPE_HEADER)%"
- *     ide?: scalar|null, // Default: null
+ *     ide?: scalar|null, // Default: "%env(default::SYMFONY_IDE)%"
  *     test?: bool,
  *     default_locale?: scalar|null, // Default: "en"
  *     set_locale_from_accept_language?: bool, // Whether to use the Accept-Language HTTP header to set the Request locale (only when the "_locale" request attribute is not passed). // Default: false
@@ -285,7 +285,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         paths?: array<string, scalar|null>,
  *         excluded_patterns?: list<scalar|null>,
  *         exclude_dotfiles?: bool, // If true, any files starting with "." will be excluded from the asset mapper. // Default: true
- *         server?: bool, // If true, a "dev server" will return the assets from the public directory (true in "debug" mode only by default). // Default: false
+ *         server?: bool, // If true, a "dev server" will return the assets from the public directory (true in "debug" mode only by default). // Default: true
  *         public_prefix?: scalar|null, // The public path where the assets will be written to (and served from when "server" is true). // Default: "/assets/"
  *         missing_import_mode?: "strict"|"warn"|"ignore", // Behavior if an asset cannot be found when imported from JavaScript or CSS files - e.g. "import './non-existent.js'". "strict" means an exception is thrown, "warn" means a warning is logged, "ignore" means the import is left as-is. // Default: "warn"
  *         extensions?: array<string, scalar|null>,
@@ -405,7 +405,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     },
  *     php_errors?: array{ // PHP errors handling configuration
  *         log?: mixed, // Use the application logger instead of the PHP logger for logging PHP errors. // Default: true
- *         throw?: bool, // Throw PHP errors as \ErrorException instances. // Default: false
+ *         throw?: bool, // Throw PHP errors as \ErrorException instances. // Default: true
  *     },
  *     exceptions?: array<string, array{ // Default: []
  *         log_level?: scalar|null, // The level of log message. Null to let Symfony decide. // Default: null
@@ -468,13 +468,13 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     scheduler?: bool|array{ // Scheduler configuration
  *         enabled?: bool, // Default: false
  *     },
- *     disallow_search_engine_index?: bool, // Enabled by default when debug is enabled. // Default: false
+ *     disallow_search_engine_index?: bool, // Enabled by default when debug is enabled. // Default: true
  *     http_client?: bool|array{ // HTTP Client configuration
  *         enabled?: bool, // Default: false
  *         max_host_connections?: int, // The maximum number of connections to a single host.
  *         default_options?: array{
  *             headers?: array<string, mixed>,
- *             vars?: list<mixed>,
+ *             vars?: array<string, mixed>,
  *             max_redirects?: int, // The maximum number of redirects to follow.
  *             http_version?: scalar|null, // The default HTTP version, typically 1.1 or 2.0, leave to null for the best version.
  *             resolve?: array<string, scalar|null>,
@@ -497,7 +497,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *                 md5?: mixed,
  *             },
  *             crypto_method?: scalar|null, // The minimum version of TLS to accept; must be one of STREAM_CRYPTO_METHOD_TLSv*_CLIENT constants.
- *             extra?: list<mixed>,
+ *             extra?: array<string, mixed>,
  *             rate_limiter?: scalar|null, // Rate limiter name to use for throttling requests. // Default: null
  *             caching?: bool|array{ // Caching configuration.
  *                 enabled?: bool, // Default: false
@@ -550,7 +550,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *                 md5?: mixed,
  *             },
  *             crypto_method?: scalar|null, // The minimum version of TLS to accept; must be one of STREAM_CRYPTO_METHOD_TLSv*_CLIENT constants.
- *             extra?: list<mixed>,
+ *             extra?: array<string, mixed>,
  *             rate_limiter?: scalar|null, // Rate limiter name to use for throttling requests. // Default: null
  *             caching?: bool|array{ // Caching configuration.
  *                 enabled?: bool, // Default: false
@@ -693,7 +693,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         default_connection?: scalar|null,
  *         types?: array<string, string|array{ // Default: []
  *             class: scalar|null,
- *             commented?: bool, // Deprecated: The doctrine-bundle type commenting features were removed; the corresponding config parameter was deprecated in 2.0 and will be dropped in 3.0.
  *         }>,
  *         driver_schemes?: array<string, scalar|null>,
  *         connections?: array<string, array{ // Default: []
@@ -703,7 +702,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *             port?: scalar|null, // Defaults to null at runtime.
  *             user?: scalar|null, // Defaults to "root" at runtime.
  *             password?: scalar|null, // Defaults to null at runtime.
- *             override_url?: bool, // Deprecated: The "doctrine.dbal.override_url" configuration key is deprecated.
  *             dbname_suffix?: scalar|null, // Adds the given suffix to the configured database name, this option has no effects for the SQLite platform
  *             application_name?: scalar|null,
  *             charset?: scalar|null,
@@ -724,61 +722,25 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *             sslcrl?: scalar|null, // The file name of the SSL certificate revocation list for PostgreSQL.
  *             pooled?: bool, // True to use a pooled server with the oci8/pdo_oracle driver
  *             MultipleActiveResultSets?: bool, // Configuring MultipleActiveResultSets for the pdo_sqlsrv driver
- *             use_savepoints?: bool, // Use savepoints for nested transactions
  *             instancename?: scalar|null, // Optional parameter, complete whether to add the INSTANCE_NAME parameter in the connection. It is generally used to connect to an Oracle RAC server to select the name of a particular instance.
  *             connectstring?: scalar|null, // Complete Easy Connect connection descriptor, see https://docs.oracle.com/database/121/NETAG/naming.htm.When using this option, you will still need to provide the user and password parameters, but the other parameters will no longer be used. Note that when using this parameter, the getHost and getPort methods from Doctrine\DBAL\Connection will no longer function as expected.
  *             driver?: scalar|null, // Default: "pdo_mysql"
- *             platform_service?: scalar|null, // Deprecated: The "platform_service" configuration key is deprecated since doctrine-bundle 2.9. DBAL 4 will not support setting a custom platform via connection params anymore.
  *             auto_commit?: bool,
  *             schema_filter?: scalar|null,
- *             logging?: bool, // Default: false
- *             profiling?: bool, // Default: false
+ *             logging?: bool, // Default: true
+ *             profiling?: bool, // Default: true
  *             profiling_collect_backtrace?: bool, // Enables collecting backtraces when profiling is enabled // Default: false
  *             profiling_collect_schema_errors?: bool, // Enables collecting schema errors when profiling is enabled // Default: true
- *             disable_type_comments?: bool,
  *             server_version?: scalar|null,
  *             idle_connection_ttl?: int, // Default: 600
  *             driver_class?: scalar|null,
  *             wrapper_class?: scalar|null,
- *             keep_slave?: bool, // Deprecated: The "keep_slave" configuration key is deprecated since doctrine-bundle 2.2. Use the "keep_replica" configuration key instead.
  *             keep_replica?: bool,
  *             options?: array<string, mixed>,
  *             mapping_types?: array<string, scalar|null>,
  *             default_table_options?: array<string, scalar|null>,
  *             schema_manager_factory?: scalar|null, // Default: "doctrine.dbal.default_schema_manager_factory"
  *             result_cache?: scalar|null,
- *             slaves?: array<string, array{ // Default: []
- *                 url?: scalar|null, // A URL with connection information; any parameter value parsed from this string will override explicitly set parameters
- *                 dbname?: scalar|null,
- *                 host?: scalar|null, // Defaults to "localhost" at runtime.
- *                 port?: scalar|null, // Defaults to null at runtime.
- *                 user?: scalar|null, // Defaults to "root" at runtime.
- *                 password?: scalar|null, // Defaults to null at runtime.
- *                 override_url?: bool, // Deprecated: The "doctrine.dbal.override_url" configuration key is deprecated.
- *                 dbname_suffix?: scalar|null, // Adds the given suffix to the configured database name, this option has no effects for the SQLite platform
- *                 application_name?: scalar|null,
- *                 charset?: scalar|null,
- *                 path?: scalar|null,
- *                 memory?: bool,
- *                 unix_socket?: scalar|null, // The unix socket to use for MySQL
- *                 persistent?: bool, // True to use as persistent connection for the ibm_db2 driver
- *                 protocol?: scalar|null, // The protocol to use for the ibm_db2 driver (default to TCPIP if omitted)
- *                 service?: bool, // True to use SERVICE_NAME as connection parameter instead of SID for Oracle
- *                 servicename?: scalar|null, // Overrules dbname parameter if given and used as SERVICE_NAME or SID connection parameter for Oracle depending on the service parameter.
- *                 sessionMode?: scalar|null, // The session mode to use for the oci8 driver
- *                 server?: scalar|null, // The name of a running database server to connect to for SQL Anywhere.
- *                 default_dbname?: scalar|null, // Override the default database (postgres) to connect to for PostgreSQL connexion.
- *                 sslmode?: scalar|null, // Determines whether or with what priority a SSL TCP/IP connection will be negotiated with the server for PostgreSQL.
- *                 sslrootcert?: scalar|null, // The name of a file containing SSL certificate authority (CA) certificate(s). If the file exists, the server's certificate will be verified to be signed by one of these authorities.
- *                 sslcert?: scalar|null, // The path to the SSL client certificate file for PostgreSQL.
- *                 sslkey?: scalar|null, // The path to the SSL client key file for PostgreSQL.
- *                 sslcrl?: scalar|null, // The file name of the SSL certificate revocation list for PostgreSQL.
- *                 pooled?: bool, // True to use a pooled server with the oci8/pdo_oracle driver
- *                 MultipleActiveResultSets?: bool, // Configuring MultipleActiveResultSets for the pdo_sqlsrv driver
- *                 use_savepoints?: bool, // Use savepoints for nested transactions
- *                 instancename?: scalar|null, // Optional parameter, complete whether to add the INSTANCE_NAME parameter in the connection. It is generally used to connect to an Oracle RAC server to select the name of a particular instance.
- *                 connectstring?: scalar|null, // Complete Easy Connect connection descriptor, see https://docs.oracle.com/database/121/NETAG/naming.htm.When using this option, you will still need to provide the user and password parameters, but the other parameters will no longer be used. Note that when using this parameter, the getHost and getPort methods from Doctrine\DBAL\Connection will no longer function as expected.
- *             }>,
  *             replicas?: array<string, array{ // Default: []
  *                 url?: scalar|null, // A URL with connection information; any parameter value parsed from this string will override explicitly set parameters
  *                 dbname?: scalar|null,
@@ -786,7 +748,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *                 port?: scalar|null, // Defaults to null at runtime.
  *                 user?: scalar|null, // Defaults to "root" at runtime.
  *                 password?: scalar|null, // Defaults to null at runtime.
- *                 override_url?: bool, // Deprecated: The "doctrine.dbal.override_url" configuration key is deprecated.
  *                 dbname_suffix?: scalar|null, // Adds the given suffix to the configured database name, this option has no effects for the SQLite platform
  *                 application_name?: scalar|null,
  *                 charset?: scalar|null,
@@ -807,7 +768,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *                 sslcrl?: scalar|null, // The file name of the SSL certificate revocation list for PostgreSQL.
  *                 pooled?: bool, // True to use a pooled server with the oci8/pdo_oracle driver
  *                 MultipleActiveResultSets?: bool, // Configuring MultipleActiveResultSets for the pdo_sqlsrv driver
- *                 use_savepoints?: bool, // Use savepoints for nested transactions
  *                 instancename?: scalar|null, // Optional parameter, complete whether to add the INSTANCE_NAME parameter in the connection. It is generally used to connect to an Oracle RAC server to select the name of a particular instance.
  *                 connectstring?: scalar|null, // Complete Easy Connect connection descriptor, see https://docs.oracle.com/database/121/NETAG/naming.htm.When using this option, you will still need to provide the user and password parameters, but the other parameters will no longer be used. Note that when using this parameter, the getHost and getPort methods from Doctrine\DBAL\Connection will no longer function as expected.
  *             }>,
@@ -815,14 +775,10 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     },
  *     orm?: array{
  *         default_entity_manager?: scalar|null,
- *         auto_generate_proxy_classes?: scalar|null, // Auto generate mode possible values are: "NEVER", "ALWAYS", "FILE_NOT_EXISTS", "EVAL", "FILE_NOT_EXISTS_OR_CHANGED", this option is ignored when the "enable_native_lazy_objects" option is true // Default: false
- *         enable_lazy_ghost_objects?: bool, // Enables the new implementation of proxies based on lazy ghosts instead of using the legacy implementation // Default: true
- *         enable_native_lazy_objects?: bool, // Enables the new native implementation of PHP lazy objects instead of generated proxies // Default: false
- *         proxy_dir?: scalar|null, // Configures the path where generated proxy classes are saved when using non-native lazy objects, this option is ignored when the "enable_native_lazy_objects" option is true // Default: "%kernel.build_dir%/doctrine/orm/Proxies"
- *         proxy_namespace?: scalar|null, // Defines the root namespace for generated proxy classes when using non-native lazy objects, this option is ignored when the "enable_native_lazy_objects" option is true // Default: "Proxies"
+ *         enable_native_lazy_objects?: bool, // Deprecated: The "enable_native_lazy_objects" option is deprecated and will be removed in DoctrineBundle 4.0, as native lazy objects are now always enabled. // Default: true
  *         controller_resolver?: bool|array{
  *             enabled?: bool, // Default: true
- *             auto_mapping?: bool|null, // Set to false to disable using route placeholders as lookup criteria when the primary key doesn't match the argument name // Default: null
+ *             auto_mapping?: bool, // Deprecated: The "auto_mapping" option is deprecated and will be removed in DoctrineBundle 4.0, as it only accepts `false` since 3.0. // Set to true to enable using route placeholders as lookup criteria when the primary key doesn't match the argument name // Default: false
  *             evict_cache?: bool, // Set to true to fetch the entity from the database instead of using the cache, if any // Default: false
  *         },
  *         entity_managers?: array<string, array{ // Default: []
@@ -862,8 +818,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *             fetch_mode_subselect_batch_size?: scalar|null,
  *             repository_factory?: scalar|null, // Default: "doctrine.orm.container_repository_factory"
  *             schema_ignore_classes?: list<scalar|null>,
- *             report_fields_where_declared?: bool, // Set to "true" to opt-in to the new mapping driver mode that was added in Doctrine ORM 2.16 and will be mandatory in ORM 3.0. See https://github.com/doctrine/orm/pull/10455. // Default: true
- *             validate_xml_mapping?: bool, // Set to "true" to opt-in to the new mapping driver mode that was added in Doctrine ORM 2.14. See https://github.com/doctrine/orm/pull/6728. // Default: false
+ *             validate_xml_mapping?: bool, // Set to "true" to opt-in to the new mapping driver mode that was added in Doctrine ORM 2.14 and will be mandatory in ORM 3.0. See https://github.com/doctrine/orm/pull/6728. // Default: false
  *             second_level_cache?: array{
  *                 region_cache_driver?: string|array{
  *                     type?: scalar|null, // Default: null
@@ -871,7 +826,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *                     pool?: scalar|null,
  *                 },
  *                 region_lock_lifetime?: scalar|null, // Default: 60
- *                 log_enabled?: bool, // Default: false
+ *                 log_enabled?: bool, // Default: true
  *                 region_lifetime?: scalar|null, // Default: 3600
  *                 enabled?: bool, // Default: true
  *                 factory?: scalar|null,
@@ -1236,8 +1191,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     role_hierarchy?: array<string, string|list<scalar|null>>,
  * }
  * @psalm-type LexikJwtAuthenticationConfig = array{
- *     private_key_path?: scalar|null, // Deprecated: The "lexik_jwt_authentication.private_key_path.private_key_path" configuration key is deprecated since version 2.5. Use "lexik_jwt_authentication.private_key_path.secret_key" instead. // Default: null
- *     public_key_path?: scalar|null, // Deprecated: The "lexik_jwt_authentication.public_key_path.public_key_path" configuration key is deprecated since version 2.5. Use "lexik_jwt_authentication.public_key_path.public_key" instead. // Default: null
  *     public_key?: scalar|null, // The key used to sign tokens (useless for HMAC). If not set, the key will be automatically computed from the secret key. // Default: null
  *     additional_public_keys?: list<scalar|null>,
  *     secret_key?: scalar|null, // The key used to sign tokens. It can be a raw secret (for HMAC), a raw RSA/ECDSA key or the path to a file itself being plaintext or PEM. // Default: null
@@ -1248,10 +1201,8 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     encoder?: array{
  *         service?: scalar|null, // Default: "lexik_jwt_authentication.encoder.lcobucci"
  *         signature_algorithm?: scalar|null, // Default: "RS256"
- *         crypto_engine?: "openssl"|"phpseclib", // Deprecated: The "lexik_jwt_authentication.encoder.crypto_engine.crypto_engine" configuration key is deprecated since version 2.5, built-in encoders support OpenSSL only // Default: "openssl"
  *     },
- *     user_identity_field?: scalar|null, // Deprecated: The "lexik_jwt_authentication.user_identity_field.user_identity_field" configuration key is deprecated since version 2.16, use "lexik_jwt_authentication.user_identity_field.user_id_claim" or implement "Symfony\Component\Security\Core\User\UserInterface::getUserIdentifier()" instead. // Default: "username"
- *     user_id_claim?: scalar|null, // If null, the user ID claim will have the same name as the one defined by the option "user_identity_field" // Default: null
+ *     user_id_claim?: scalar|null, // Default: "username"
  *     token_extractors?: array{
  *         authorization_header?: bool|array{
  *             enabled?: bool, // Default: true
@@ -1347,7 +1298,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         lexik_jwt_authentication?: LexikJwtAuthenticationConfig,
  *         maker?: MakerConfig,
  *     },
- *     "when@prod"?: array{
+ *     "when@test"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
  *         services?: ServicesConfig,
@@ -1436,7 +1387,7 @@ namespace Symfony\Component\Routing\Loader\Configurator;
  * }
  * @psalm-type RoutesConfig = array{
  *     "when@dev"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
- *     "when@prod"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
+ *     "when@test"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     ...<string, RouteConfig|ImportConfig|AliasConfig>
  * }
  */
