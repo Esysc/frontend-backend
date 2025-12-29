@@ -14,7 +14,7 @@
     "doctrine/migrations": "^3.6",
     "doctrine/dbal": "^4.0",
     "symfony/security-bundle": "^8.0",
-    "symfony/http-foundation": "^7.0",
+    "symfony/http-foundation": "^8.0",
     "symfony/validator": "^8.0",
     "symfony/maker-bundle": "^1.53",
     "lexik/jwt-authentication-bundle": "^3.1",
