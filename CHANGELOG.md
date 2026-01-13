@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-13
+
+### Changed
+
+- **Dependency Management:** Migrated from Dependabot to Renovate for automated dependency updates
+- **Frontend:** Updated @typescript-eslint packages to 8.53.0, aligning parser and plugin versions
+- **Frontend:** Bumped Vite to 7.3.1, Vitest to 4.0.17, TypeScript to 5.9.3
+- **Frontend:** Updated Vue ecosystem (vue, vuetify, vue-router, vue-tsc)
+- **Backend:** Updated Symfony packages to 8.0.3, Doctrine ORM to 3.6.1, phpunit to 12.5.4
+- **Docker:** Upgraded base images (Node 25.2.1, PHP 8.5-fpm, nginx 1.29.4, PostgreSQL 18)
+- **CI/CD:** Updated GitHub Actions and security scanning tools
+
+### Added
+
+- Renovate configuration with autodiscovery for npm, Composer, Docker, Docker Compose, and GitHub Actions
+- Docker Compose file versioning (bumped to 5.0.0 compatibility)
+- Enhanced GitHub Actions permissions and CodeQL security scanning
+
+### Fixed
+
+- Resolved TypeScript ESLint peer dependency conflict
+- Fixed Dependabot-related workflow issues before Renovate migration
+
 ## [1.0.0] - 2025-12-08
 
 ### Changed
