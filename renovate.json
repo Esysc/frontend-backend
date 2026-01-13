@@ -12,15 +12,11 @@
     {
       "matchManagers": ["npm"],
       "matchDepTypes": ["devDependencies"],
-      "groupName": "npm devDependencies (minor/patch)",
-      "groupMinor": true,
-      "groupPatch": true
+      "groupName": "npm devDependencies"
     },
     {
       "matchManagers": ["composer"],
-      "groupName": "composer deps (minor/patch)",
-      "groupMinor": true,
-      "groupPatch": true
+      "groupName": "composer deps"
     },
     {
       "matchManagers": ["github-actions"],
