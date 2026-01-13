@@ -22,9 +22,16 @@
       "groupMinor": true,
       "groupPatch": true
     },
-    { "matchManagers": ["github-actions"], "groupName": "github actions", "labels": ["deps", "ci"] },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions",
+      "labels": ["deps", "ci"]
+    },
     { "matchUpdateTypes": ["major"], "dependencyDashboardApproval": true }
   ],
-  "lockFileMaintenance": { "enabled": true, "schedule": ["before 07:00 on Monday"] },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 07:00 on Monday"]
+  },
   "automerge": false
 }
