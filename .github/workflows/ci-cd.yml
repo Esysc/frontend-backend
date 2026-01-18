@@ -22,6 +22,8 @@ jobs:
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Clear npm cache
+        run: npm cache clean --force
       - name: Run pre-commit hooks
         uses: pre-commit/action@v3.0.1
         with:

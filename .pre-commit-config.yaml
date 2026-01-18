@@ -25,7 +25,7 @@ repos:
 
       - id: prettier-format
         name: Prettier (format JS/TS/Vue/JSON/YAML)
-        entry: bash -c 'if command -v npx >/dev/null 2>&1; then npx --yes --prefix frontend prettier --write "$@" || npx --yes prettier --write "$@"; else echo "npx not found, skipping prettier"; fi' --
+        entry: bash -c 'if [ -f frontend/package.json ]; then npm --prefix frontend exec prettier -- --write "$@"; else echo "frontend package.json not found, skipping prettier"; fi' --
         language: system
         files: '\.(js|jsx|ts|tsx|vue|json|ya?ml)$'
 
