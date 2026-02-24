@@ -3,14 +3,40 @@
     <v-app-bar color="primary">
       <v-app-bar-title>Train Routing & Analytics</v-app-bar-title>
       <v-spacer />
-      <v-btn to="/routes" variant="text"> Routes </v-btn>
-      <v-btn to="/analytics" variant="text"> Analytics </v-btn>
-      <v-btn to="/docs" variant="text"> API Docs </v-btn>
+      <v-btn
+        to="/routes"
+        variant="text"
+      >
+        Routes
+      </v-btn>
+      <v-btn
+        to="/analytics"
+        variant="text"
+      >
+        Analytics
+      </v-btn>
+      <v-btn
+        to="/docs"
+        variant="text"
+      >
+        API Docs
+      </v-btn>
       <template v-if="isLoggedIn">
-        <v-btn color="error" variant="text" @click="logout"> Logout </v-btn>
+        <v-btn
+          color="error"
+          variant="text"
+          @click="logout"
+        >
+          Logout
+        </v-btn>
       </template>
       <template v-else>
-        <v-btn to="/auth" variant="text"> Login / Register </v-btn>
+        <v-btn
+          to="/auth"
+          variant="text"
+        >
+          Login / Register
+        </v-btn>
       </template>
     </v-app-bar>
 

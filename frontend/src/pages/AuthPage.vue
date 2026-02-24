@@ -1,10 +1,17 @@
 <template>
   <v-container class="mt-8">
-    <v-card class="mx-auto" max-width="480">
+    <v-card
+      class="mx-auto"
+      max-width="480"
+    >
       <v-card-title>User registration & login (demo)</v-card-title>
       <v-card-text>
         <v-form @submit.prevent="onLogin">
-          <v-text-field v-model="username" label="Username" required />
+          <v-text-field
+            v-model="username"
+            label="Username"
+            required
+          />
           <v-text-field
             v-model="password"
             label="Password"
@@ -24,14 +31,23 @@
               </v-btn>
             </v-col>
             <v-col cols="6">
-              <v-btn color="secondary" block type="submit" :loading="loading">
+              <v-btn
+                color="secondary"
+                block
+                type="submit"
+                :loading="loading"
+              >
                 Login
               </v-btn>
             </v-col>
           </v-row>
         </v-form>
 
-        <v-alert v-if="message" :type="messageType" class="mt-4">
+        <v-alert
+          v-if="message"
+          :type="messageType"
+          class="mt-4"
+        >
           {{ message }}
         </v-alert>
       </v-card-text>

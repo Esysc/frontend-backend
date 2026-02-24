@@ -1,6 +1,9 @@
 <template>
   <v-container class="mt-8">
-    <v-card class="mx-auto" max-width="1200">
+    <v-card
+      class="mx-auto"
+      max-width="1200"
+    >
       <v-card-title>API Docs (OpenAPI)</v-card-title>
       <v-card-text>
         <div id="redoc-container" />

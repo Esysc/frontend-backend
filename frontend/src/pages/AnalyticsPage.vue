@@ -4,24 +4,40 @@
       <v-card-title>Analytics Dashboard</v-card-title>
       <v-card-text>
         <v-row class="mb-4">
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-text-field
               v-model="filters.from"
               type="date"
               label="From Date"
             />
           </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field v-model="filters.to" type="date" label="To Date" />
+          <v-col
+            cols="12"
+            md="3"
+          >
+            <v-text-field
+              v-model="filters.to"
+              type="date"
+              label="To Date"
+            />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.groupBy"
               :items="['none', 'day', 'month', 'year']"
               label="Group By"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-btn
               color="primary"
               :loading="loading"
@@ -33,7 +49,11 @@
           </v-col>
         </v-row>
 
-        <v-alert v-if="error" type="error" dismissible>
+        <v-alert
+          v-if="error"
+          type="error"
+          dismissible
+        >
           {{ error }}
         </v-alert>
 
@@ -44,7 +64,9 @@
           class="elevation-1"
         >
           <template #no-data>
-            <p class="text-center mt-4">No data available</p>
+            <p class="text-center mt-4">
+              No data available
+            </p>
           </template>
         </v-data-table>
 
