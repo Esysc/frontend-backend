@@ -1,15 +1,9 @@
 <template>
   <v-container class="mt-8">
-    <v-card
-      class="mx-auto"
-      max-width="600"
-    >
+    <v-card class="mx-auto" max-width="600">
       <v-card-title>
         Calculate Route
-        <v-chip
-          class="ml-2"
-          :color="stations.length ? 'green' : 'orange'"
-        >
+        <v-chip class="ml-2" :color="stations.length ? 'green' : 'orange'">
           {{ stations.length }} stations
         </v-chip>
       </v-card-title>
@@ -42,31 +36,16 @@
             class="mb-4"
           />
 
-          <v-btn
-            type="submit"
-            color="primary"
-            :loading="loading"
-            block
-          >
+          <v-btn type="submit" color="primary" :loading="loading" block>
             Calculate Route
           </v-btn>
         </v-form>
 
-        <v-alert
-          v-if="error"
-          type="error"
-          class="mt-4"
-          dismissible
-        >
+        <v-alert v-if="error" type="error" class="mt-4" dismissible>
           {{ error }}
         </v-alert>
 
-        <v-card
-          v-if="result"
-          class="mt-6"
-          variant="outlined"
-          color="green"
-        >
+        <v-card v-if="result" class="mt-6" variant="outlined" color="green">
           <v-card-title>{{ result.distanceKm.toFixed(2) }} km</v-card-title>
           <v-card-text>{{ result.path.join(' → ') }}</v-card-text>
         </v-card>
