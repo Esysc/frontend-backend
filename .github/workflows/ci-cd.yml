@@ -155,7 +155,7 @@ jobs:
 
       - name: Spectral lint OpenAPI
         shell: bash
-        run: npx -y @stoplight/spectral-cli lint openapi.yml --ruleset .spectral.yml
+        run: npx -y @stoplight/spectral-cli lint backend/openapi.yml --ruleset .spectral.yml
         working-directory: .
 
       - name: Run ESLint
