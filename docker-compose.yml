@@ -9,7 +9,7 @@ services:
     # ports:
     #   - "5432:5432"  # Comment out to avoid port conflicts in CI/ACT
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
