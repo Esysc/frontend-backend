@@ -206,7 +206,7 @@ pre-commit run --all-files
 
 ## Troubleshooting
 
-- Database issues: `docker-compose logs db` or `php bin/console doctrine:schema:create` inside the backend container.
+- Database issues: `docker compose logs pgdb` or `php bin/console doctrine:schema:create` inside the backend container.
 - Backend start errors: make sure `composer install` ran and dependencies are present.
 - Frontend issues: check `npm ci` and `VITE_API_URL`.
 - Nginx / CORS: `docker-compose logs nginx` and backend CORS headers.
