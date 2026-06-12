@@ -119,7 +119,7 @@ jobs:
           awk "BEGIN { if (${pct} < 50) exit 2 }"
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           files: ./backend/coverage.xml
 
@@ -173,7 +173,7 @@ jobs:
           node -e "const fs=require('fs'); const p='coverage/coverage-summary.json'; if(!fs.existsSync(p)){console.error('coverage file missing'); process.exit(1);} const c=JSON.parse(fs.readFileSync(p,'utf8')); const pct=c.total.lines.pct; console.log('Frontend lines coverage',pct); if(pct<50){console.error('Coverage threshold not met (50%)'); process.exit(1);}"
 
       - name: Upload frontend coverage
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           files: ./frontend/coverage/lcov.info
 
